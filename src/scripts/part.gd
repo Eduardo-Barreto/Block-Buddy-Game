@@ -23,8 +23,9 @@ func inactivate():
 	for block in get_blocks():
 		var block_position = Global.position_to_grid(block.position + position)
 
-		Global.inactive_positions.append(block_position)
+		Global.inactive_positions[block_position] = block
 
+	get_parent().check_full_line()
 	get_parent().generate_new_part()
 
 
@@ -77,6 +78,10 @@ func _input(event):
 
 	if event.is_action_pressed('ui_up'):
 		rotate90()
+
+	if event.is_action_pressed('ui_accept'):
+		for _i in range(20):
+			move_down()
 
 
 func _ready():

@@ -10,7 +10,7 @@ var part_colors = {
 	'z': Color(0.77, 0.19, 0.13, 1),
 }
 
-var inactive_positions = []
+var inactive_positions = {}
 
 func position_to_grid(pos: Vector2) -> Vector2:
 	return Vector2(int(pos.x / 54), int(pos.y / 54))
