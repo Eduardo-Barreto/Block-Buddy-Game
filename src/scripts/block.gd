@@ -4,28 +4,29 @@ export (Color) var color = Color(1, 1, 1, 1)
 var part_type = 'i'
 
 
-func position_to_grid(pos):
-	return Vector2(int(pos.x / 54), int(pos.y / 54))
-
-
-func _ready():
-	$shape.color = Color(Global.part_types[part_type]['color'])
+func set_part_type(type: String):
+	part_type = type
+	$shape.color = Global.part_colors[part_type]
 	print($shape.color)
 
 
 func can_move_down() -> bool:
-	var next_pos = position_to_grid(position)
+	var next_pos = Global.position_to_grid(position + get_parent().position)
 	next_pos.y += 1
 
-	if next_pos.y > 19:
+	print(next_pos.y)
+	if next_pos.y >= 20:
 		return false
+
 
 	return not Global.inactive_positions.has(next_pos)
 
 
 func can_move(direction: int) -> bool:
-	var next_pos = position_to_grid(position)
+	var next_pos = Global.position_to_grid(position + get_parent().position)
 	next_pos.x += direction
+
+	print(next_pos.x)
 
 	if next_pos.x > 9 or next_pos.x < 0:
 		return false
@@ -33,15 +34,34 @@ func can_move(direction: int) -> bool:
 	return not Global.inactive_positions.has(next_pos)
 
 
-func move(direction: int):
-	var next_pos = position_to_grid(position)
-	next_pos.x += direction
+func can_rotate():
+	var next_pos = Vector2()
+	next_pos.x = position.y
+	next_pos.y = -position.x
 
-	position = next_pos * 54
+	next_pos.x = Global.position_to_grid(next_pos + get_parent().position).x
+	next_pos.y = Global.position_to_grid(next_pos + get_parent().position).y
+
+	if next_pos.x > 9 or next_pos.x < 0:
+		print('cant move')
+		print(position)
+		return false
+
+	if next_pos.y >= 19:
+		return false
+
+	return not Global.inactive_positions.has(next_pos)
 
 
-func move_down():
-	var next_pos = position_to_grid(position)
-	next_pos.y += 1
 
-	position = next_pos * 54
+func rotate90():
+	var next_pos = position
+
+	next_pos.x = position.y
+	next_pos.y = -position.x
+
+	position = next_pos
+
+
+func _ready():
+	set_part_type(part_type)

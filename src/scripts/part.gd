@@ -16,11 +16,16 @@ func get_blocks():
 
 
 func inactivate():
+	if not is_active:
+		return
+
 	is_active = false
 	for block in get_blocks():
-		var block_position = block.position_to_grid()
+		var block_position = Global.position_to_grid(block.position + position)
 
 		Global.inactive_positions.append(block_position)
+
+	get_parent().generate_new_part()
 
 
 func move(direction: int) -> void:
@@ -28,25 +33,57 @@ func move(direction: int) -> void:
 		if not block.can_move(direction):
 			return
 
-	for block in get_blocks():
-		block.move(direction)
+	var next_pos = Global.position_to_grid(position)
+	next_pos.x += direction
+
+	position = next_pos * 54
 
 func move_down():
 	for block in get_blocks():
 		if not block.can_move_down():
 			inactivate()
+			return
+
+	var next_pos = Global.position_to_grid(position)
+	next_pos.y += 1
+
+	position = next_pos * 54
+
+func rotate90():
+	for block in get_blocks():
+		if not block.can_rotate():
+			return
 
 	for block in get_blocks():
-		block.move_down()
+		block.rotate90()
 
 
 func _on_Timer_timeout():
 	move_down()
 
 
+func _input(event):
+	if not is_active:
+		return
+
+	if event.is_action_pressed('ui_right'):
+		move(1)
+
+	if event.is_action_pressed('ui_left'):
+		move(-1)
+
+	if event.is_action_pressed('ui_down'):
+		move_down()
+
+	if event.is_action_pressed('ui_up'):
+		rotate90()
+
+
 func _ready():
 	for block in get_blocks():
-		block.part_type = part_type
+		block.set_part_type(part_type)
+
+	move(3)
 
 	var timer = Timer.new()
 	timer.connect('timeout', self, '_on_Timer_timeout')
@@ -54,16 +91,3 @@ func _ready():
 	timer.one_shot = false
 	add_child(timer)
 	timer.start()
-
-
-func _input(event):
-	if event.is_action_pressed('ui_right'):
-		move(1)
-
-	if event.is_action_pressed('ui_left'):
-		move(-1)
-
-
-func _process(_delta):
-	if not is_active:
-		return
