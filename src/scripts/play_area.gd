@@ -2,6 +2,8 @@ extends Node2D
 
 var types = ['i', 'j', 'l', 'o', 's', 't', 'z']
 
+var holded = false
+
 
 func load_part(part_type):
 	var new_part = load('res://scenes/parts/' + part_type + '.tscn').instance()
@@ -12,8 +14,10 @@ func load_part(part_type):
 func generate_new_part():
 	load_part(Global.next_part)
 
+	randomize()
 	var next_part_type = types[randi() % types.size()]
 	Global.next_part = next_part_type
+	holded = false
 
 
 func check_full_line():
@@ -51,15 +55,32 @@ func check_full_line():
 				current_block.position.y += 54
 				Global.inactive_positions[Vector2(collumn, upper_line+1)] = current_block
 
+func restart_game():
+	Global.score = 0
+	Global.next_part = 'i'
+	Global.holding_part = null
+	Global.inactive_positions = {}
+
+	for child in get_children():
+		child.queue_free()
+
+	generate_new_part()
+
 
 func _input(event):
 	if event.is_action_pressed('hold_part'):
+		if holded:
+			return
+
 		var current_part = null
 
 		for child in get_children():
 			if child.is_active:
 				current_part = child
 				break
+
+		if current_part == null:
+			return
 
 		if Global.holding_part != null:
 			load_part(Global.holding_part)
@@ -68,6 +89,7 @@ func _input(event):
 
 		Global.holding_part = current_part.part_type
 		current_part.queue_free()
+		holded = true
 
 
 func _ready():

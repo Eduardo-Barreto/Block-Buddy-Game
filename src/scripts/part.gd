@@ -16,16 +16,26 @@ func get_blocks():
 
 
 func inactivate():
-	if not is_active:
-		return
 
 	is_active = false
+
+	var higher_block_position = 19
+
 	for block in get_blocks():
 		var block_position = Global.position_to_grid(block.position + position)
+
+		if block_position.y < higher_block_position:
+			higher_block_position = block_position.y
 
 		Global.inactive_positions[block_position] = block
 
 	get_parent().check_full_line()
+
+	if higher_block_position <= 0:
+		# restart scene
+		get_parent().restart_game()
+		return
+
 	get_parent().generate_new_part()
 
 
