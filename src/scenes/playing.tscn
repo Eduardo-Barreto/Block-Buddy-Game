@@ -242,13 +242,13 @@ __meta__ = {
 position = Vector2( 220, 322 )
 
 [node name="text" type="Label" parent="fire"]
-margin_left = 54.0
+margin_left = 25.0
 margin_top = 560.0
-margin_right = 387.0
+margin_right = 417.0
 margin_bottom = 618.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 1 )
-text = "Demitir estagiário"
+text = "Suspender estagiário"
 align = 1
 valign = 1
 
