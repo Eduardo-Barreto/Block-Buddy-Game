@@ -16,13 +16,17 @@ func load_part(part_type):
 
 	add_child(new_part)
 
+
 func generate_new_part():
-	if Global.turn >= 3:
+	if Global.turn >= Global.turn_limit:
 		Global.turn = 0
 		Global.intern_turn = true
+		get_parent().get_node('fire/animation').play('angry_float')
+		Global.turn_limit = 3
 	else:
 		Global.turn += 1
 		Global.intern_turn = false
+		get_parent().get_node('fire/animation').play('happy_float')
 
 	print(Global.intern_turn)
 

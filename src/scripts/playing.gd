@@ -2,7 +2,7 @@ extends Node2D
 
 
 func _ready():
-	$fire/animation.play('float')
+	$fire/animation.play('happy_float')
 
 
 func _process(_delta):
@@ -17,3 +17,15 @@ func _process(_delta):
 		$holding.texture = null
 
 	$score.text = str(Global.score)
+
+	if Global.turn_limit - Global.turn > 3:
+		$'fire/intern'.texture = load('res://assets/sad_intern.png')
+
+
+func _on_fire_pressed():
+	if Global.score < 3:
+		$fire/animation.play('not_enough_points')
+		return
+
+	Global.score -= 3
+	Global.turn_limit = 7
