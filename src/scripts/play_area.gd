@@ -74,15 +74,8 @@ func check_full_line():
 				Global.inactive_positions[Vector2(collumn, upper_line+1)] = current_block
 
 func restart_game():
-	Global.score = 0
-	Global.next_part = 'i'
-	Global.holding_part = null
-	Global.inactive_positions = {}
-
-	for child in get_children():
-		child.queue_free()
-
-	generate_new_part()
+	get_parent().get_node('fire/intern').visible = false
+	get_parent().get_node('lose').visible = true
 
 
 func _input(event):

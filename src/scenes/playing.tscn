@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://scripts/playing.gd" type="Script" id=1]
 [ext_resource path="res://assets/playing_background.png" type="Texture" id=2]
@@ -7,6 +7,8 @@
 [ext_resource path="res://assets/intern.png" type="Texture" id=5]
 [ext_resource path="res://scripts/play_area.gd" type="Script" id=6]
 [ext_resource path="res://assets/angry_intern.png" type="Texture" id=7]
+[ext_resource path="res://assets/lose_intern.png" type="Texture" id=8]
+[ext_resource path="res://assets/lose_box.png" type="Texture" id=9]
 
 [sub_resource type="DynamicFont" id=1]
 size = 48
@@ -156,6 +158,10 @@ tracks/1/keys = {
 "values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
 }
 
+[sub_resource type="DynamicFont" id=7]
+size = 60
+font_data = ExtResource( 3 )
+
 [node name="playing" type="Node2D"]
 script = ExtResource( 1 )
 
@@ -289,4 +295,37 @@ position = Vector2( 1581, 162 )
 position = Vector2( 690, 1 )
 script = ExtResource( 6 )
 
+[node name="lose" type="Node2D" parent="."]
+visible = false
+
+[node name="darkener" type="ColorRect" parent="lose"]
+margin_right = 1920.0
+margin_bottom = 1080.0
+color = Color( 0, 0, 0, 0.75 )
+
+[node name="lose_box" type="Sprite" parent="lose"]
+position = Vector2( 933, 594 )
+texture = ExtResource( 9 )
+
+[node name="lose_text" type="Label" parent="lose"]
+margin_left = 598.0
+margin_top = 523.0
+margin_right = 1286.0
+margin_bottom = 670.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 7 )
+text = "Você é muito ruim nesse jogo...
+Clique para reiniciar"
+align = 1
+
+[node name="lose_intern" type="Sprite" parent="lose"]
+position = Vector2( 1581, 663 )
+texture = ExtResource( 8 )
+
+[node name="restart_button" type="Button" parent="lose"]
+margin_right = 1920.0
+margin_bottom = 1080.0
+flat = true
+
 [connection signal="pressed" from="fire" to="." method="_on_fire_pressed"]
+[connection signal="pressed" from="lose/restart_button" to="." method="_on_restart_button_pressed"]

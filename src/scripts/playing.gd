@@ -19,7 +19,7 @@ func _process(_delta):
 	$score.text = str(Global.score)
 
 	if Global.turn_limit - Global.turn > 3:
-		$'fire/intern'.texture = load('res://assets/sad_intern.png')
+		$fire/intern.texture = load('res://assets/sad_intern.png')
 
 
 func _on_fire_pressed():
@@ -29,3 +29,18 @@ func _on_fire_pressed():
 
 	Global.score -= 3
 	Global.turn_limit = 7
+
+
+func _on_restart_button_pressed():
+	$fire/intern.visible = true
+	$lose.visible = false
+
+	Global.score = 0
+	Global.next_part = 'i'
+	Global.holding_part = null
+	Global.inactive_positions = {}
+
+	for child in $play_area.get_children():
+		child.queue_free()
+
+	$play_area.generate_new_part()
