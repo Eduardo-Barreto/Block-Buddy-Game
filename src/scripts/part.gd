@@ -40,6 +40,9 @@ func move(direction: int) -> void:
 	position = next_pos * 54
 
 func move_down():
+	if not is_active:
+		return
+
 	for block in get_blocks():
 		if not block.can_move_down():
 			inactivate()
