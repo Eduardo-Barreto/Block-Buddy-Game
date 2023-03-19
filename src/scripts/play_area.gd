@@ -21,8 +21,8 @@ func generate_new_part():
 	if Global.turn >= Global.turn_limit:
 		Global.turn = 0
 		Global.intern_turn = true
-		get_parent().get_node('fire/animation').play('angry_float')
 		Global.turn_limit = 3
+		get_parent().get_node('fire/animation').play('angry_float')
 	else:
 		Global.turn += 1
 		Global.intern_turn = false

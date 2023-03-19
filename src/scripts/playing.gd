@@ -36,6 +36,8 @@ func _on_restart_button_pressed():
 	$lose.visible = false
 
 	Global.score = 0
+	Global.turn = 0
+	Global.turn_limit = 3
 	Global.next_part = 'i'
 	Global.holding_part = null
 	Global.inactive_positions = {}
