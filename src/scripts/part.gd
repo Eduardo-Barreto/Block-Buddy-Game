@@ -41,7 +41,6 @@ func inactivate():
 	get_parent().check_full_line()
 
 	if higher_block_position <= 0:
-		# restart scene
 		get_parent().restart_game()
 		return
 

@@ -28,8 +28,6 @@ func generate_new_part():
 		Global.intern_turn = false
 		get_parent().get_node('fire/animation').play('happy_float')
 
-	print(Global.intern_turn)
-
 	load_part(Global.next_part)
 
 	randomize()
