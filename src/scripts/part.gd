@@ -2,6 +2,15 @@ extends Node2D
 
 var is_active = true
 var part_type = 'i'
+var timer = Timer.new()
+
+
+var intern_actions = [
+	'rotate',
+	'move_left',
+	'move_right',
+	null
+]
 
 
 func get_blocks():
@@ -73,28 +82,64 @@ func rotate90():
 
 
 func _on_Timer_timeout():
+
+	if not is_active:
+		return
+
 	move_down()
+
+	if not Global.intern_turn:
+		return
+
+	randomize()
+	var random_action = intern_actions[randi() % intern_actions.size()]
+
+	if random_action != null:
+		do_action(random_action)
+
+
+func do_action(action: String):
+	if not is_active:
+		return
+
+	if action == 'move_right':
+		move(1)
+
+	if action == 'move_left':
+		move(-1)
+
+	if action == 'move_down':
+		move_down()
+
+	if action == 'rotate':
+		rotate90()
+
+	if action == 'force_down':
+		for _i in range(20):
+			move_down()
 
 
 func _input(event):
 	if not is_active:
 		return
 
-	if event.is_action_pressed('ui_right'):
-		move(1)
+	if Global.intern_turn:
+		return
 
-	if event.is_action_pressed('ui_left'):
-		move(-1)
+	if event.is_action_pressed('move_right'):
+		do_action('move_right')
 
-	if event.is_action_pressed('ui_down'):
-		move_down()
+	if event.is_action_pressed('move_left'):
+		do_action('move_left')
 
-	if event.is_action_pressed('ui_up'):
-		rotate90()
+	if event.is_action_pressed('move_down'):
+		do_action('move_down')
 
-	if event.is_action_pressed('ui_accept'):
-		for _i in range(20):
-			move_down()
+	if event.is_action_pressed('rotate'):
+		do_action('rotate')
+
+	if event.is_action_pressed('force_down'):
+		do_action('force_down')
 
 
 func _ready():
@@ -103,9 +148,7 @@ func _ready():
 
 	move(3)
 
-	var timer = Timer.new()
 	timer.connect('timeout', self, '_on_Timer_timeout')
-	timer.wait_time = 0.5
 	timer.one_shot = false
 	add_child(timer)
 	timer.start()

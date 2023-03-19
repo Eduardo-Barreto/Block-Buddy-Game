@@ -1,6 +1,10 @@
 extends Node2D
 
 
+func _ready():
+	$fire/animation.play('float')
+
+
 func _process(_delta):
 	if Global.next_part != null:
 		$next.texture = load('res://assets/parts/' + Global.next_part + '.png')

@@ -8,10 +8,24 @@ var holded = false
 func load_part(part_type):
 	var new_part = load('res://scenes/parts/' + part_type + '.tscn').instance()
 	new_part.part_type = part_type
+
+	if Global.intern_turn:
+		new_part.timer.wait_time = 0.1
+	else:
+		new_part.timer.wait_time = 0.5
+
 	add_child(new_part)
 
-
 func generate_new_part():
+	if Global.turn >= 3:
+		Global.turn = 0
+		Global.intern_turn = true
+	else:
+		Global.turn += 1
+		Global.intern_turn = false
+
+	print(Global.intern_turn)
+
 	load_part(Global.next_part)
 
 	randomize()
@@ -68,6 +82,10 @@ func restart_game():
 
 
 func _input(event):
+
+	if Global.intern_turn:
+		return
+
 	if event.is_action_pressed('hold_part'):
 		if holded:
 			return
@@ -82,6 +100,8 @@ func _input(event):
 		if current_part == null:
 			return
 
+		holded = true
+
 		if Global.holding_part != null:
 			load_part(Global.holding_part)
 		else:
@@ -89,7 +109,6 @@ func _input(event):
 
 		Global.holding_part = current_part.part_type
 		current_part.queue_free()
-		holded = true
 
 
 func _ready():

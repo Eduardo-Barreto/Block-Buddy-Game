@@ -14,7 +14,9 @@ var inactive_positions = {}
 var next_part = 'i'
 var holding_part = null
 var score = 0
+var intern_turn = false
 
+var turn = 0
 
 func position_to_grid(pos: Vector2) -> Vector2:
 	return Vector2(int(pos.x / 54), int(pos.y / 54))
